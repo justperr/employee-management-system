@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 const { initializePool } = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
+const employeeRoutes = require('./routes/employeeRoutes');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/employees', employeeRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
