@@ -13,7 +13,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
   return (
     <Routes>
-
       <Route path="/" element={<LoginPage />} />
 
       <Route
@@ -30,8 +29,10 @@ function App() {
         <Route path="/reports" element={<ReportsPage />} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
-
+      <Route
+        path="*"
+        element={<Navigate to="/" replace />}
+      />
     </Routes>
   );
 }
