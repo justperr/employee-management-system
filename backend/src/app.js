@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const { initializePool } = require('./config/database');
-const testRoutes = require('./routes/testRoutes');
 
 const app = express();
 
@@ -13,8 +12,6 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/api/health', (req, res) => {
   res.json({ message: 'Server is running' });
 });
-
-app.use('/api/test', testRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
