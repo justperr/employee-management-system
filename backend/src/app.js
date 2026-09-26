@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+
 const { initializePool } = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const departmentRoutes = require('./routes/departmentRoutes');
 
 const app = express();
 
@@ -19,6 +21,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/departments', departmentRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
@@ -38,6 +41,7 @@ async function startServer() {
     const PORT = process.env.PORT || 5000;
 
     app.listen(PORT, () => {
+      console.log(`✅ Connected to MSSQL Server successfully`);
       console.log(`🚀 Server running on http://localhost:${PORT}`);
       console.log(`📚 Health check: http://localhost:${PORT}/api/health`);
     });
