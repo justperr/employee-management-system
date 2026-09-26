@@ -65,6 +65,46 @@ async function createEmployee(req, res) {
   }
 }
 
+async function getEmployees(req, res) {
+  try {
+    const pool = getPool();
+
+    const result = await pool.request().query(`
+      SELECT
+        e.EmployeeId,
+        e.FirstName,
+        e.LastName,
+        e.Email,
+        e.Phone,
+        e.DateOfBirth,
+        e.HireDate,
+        e.Salary,
+        e.Status,
+        e.CreatedAt,
+        e.UpdatedAt,
+        d.DepartmentId,
+        d.DepartmentName,
+        p.PositionId,
+        p.PositionName
+      FROM Employees e
+      INNER JOIN Departments d ON e.DepartmentId = d.DepartmentId
+      INNER JOIN Positions p ON e.PositionId = p.PositionId
+      ORDER BY e.EmployeeId DESC
+    `);
+
+    return res.status(200).json({
+      message: 'Employees retrieved successfully',
+      data: result.recordset
+    });
+  } catch (error) {
+    console.error('Get employees error:', error.message);
+    return res.status(500).json({
+      message: 'Internal Server Error'
+    });
+  }
+}
+
 module.exports = {
-  createEmployee
+  createEmployee,
+  getEmployees
 };
