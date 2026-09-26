@@ -104,7 +104,57 @@ async function getEmployees(req, res) {
   }
 }
 
+async function getEmployeeById(req, res) {
+  try {
+    const { id } = req.params;
+    const pool = getPool();
+
+    const result = await pool
+      .request()
+      .input('id', sql.Int, id)
+      .query(`
+        SELECT
+          e.EmployeeId,
+          e.FirstName,
+          e.LastName,
+          e.Email,
+          e.Phone,
+          e.DateOfBirth,
+          e.HireDate,
+          e.Salary,
+          e.Status,
+          e.CreatedAt,
+          e.UpdatedAt,
+          d.DepartmentId,
+          d.DepartmentName,
+          p.PositionId,
+          p.PositionName
+        FROM Employees e
+        INNER JOIN Departments d ON e.DepartmentId = d.DepartmentId
+        INNER JOIN Positions p ON e.PositionId = p.PositionId
+        WHERE e.EmployeeId = @id
+      `);
+
+    if (result.recordset.length === 0) {
+      return res.status(404).json({
+        message: 'Employee not found'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Employee retrieved successfully',
+      data: result.recordset[0]
+    });
+  } catch (error) {
+    console.error('Get employee by ID error:', error.message);
+    return res.status(500).json({
+      message: 'Internal Server Error'
+    });
+  }
+}
+
 module.exports = {
   createEmployee,
-  getEmployees
+  getEmployees,
+  getEmployeeById
 };
