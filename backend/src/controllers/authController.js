@@ -1,6 +1,6 @@
 const sql = require('mssql');
 const { getPool } = require('../config/database');
-const { comparePassword, generateToken } = require('../utils/helpers');
+const { comparePassword, generateToken, hashPassword } = require('../utils/helpers');
 
 async function login(req, res) {
   try {
@@ -64,6 +64,53 @@ async function login(req, res) {
   }
 }
 
+async function register(req, res) {
+  try {
+    const { email, password, role } = req.body;
+
+    if (!email || !password || !role) {
+      return res.status(400).json({
+        message: 'Email, password, and role are required'
+      });
+    }
+
+    const pool = getPool();
+
+    const existingUser = await pool
+      .request()
+      .input('email', sql.NVarChar, email)
+      .query('SELECT UserId FROM Users WHERE Email = @email');
+
+    if (existingUser.recordset.length > 0) {
+      return res.status(400).json({
+        message: 'Email already exists'
+      });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    await pool
+      .request()
+      .input('email', sql.NVarChar, email)
+      .input('passwordHash', sql.NVarChar, hashedPassword)
+      .input('role', sql.NVarChar, role)
+      .query(`
+        INSERT INTO Users (Email, PasswordHash, Role)
+        VALUES (@email, @passwordHash, @role)
+      `);
+
+    return res.status(201).json({
+      message: 'User registered successfully'
+    });
+  } catch (error) {
+    console.error('Register error:', error.message);
+    return res.status(500).json({
+      message: 'Internal Server Error'
+    });
+  }
+}
+
 module.exports = {
-  login
+  login,
+  register
 };
