@@ -511,6 +511,28 @@ feat: add report printing
 
 ---
 
+## Challenges Encountered
+
+During the development of the Employee Management System, several technical and implementation challenges were encountered and addressed:
+
+* **Frontend and Backend Integration** — Connecting the React frontend with the ExpressJS REST API required careful handling of API endpoints, request formats, authentication tokens, and error responses.
+
+* **Authentication and Authorization** — Implementing JWT-based authentication and role-based access control required ensuring that protected routes could only be accessed by authenticated users, while administrative operations were restricted to users with the appropriate role.
+
+* **Database Relationships** — Managing relationships between Employees, Departments, and Positions required proper foreign keys and validation to prevent invalid or inconsistent records.
+
+* **Dynamic Department and Position Selection** — The employee and position forms needed to ensure that positions were associated with the correct department. The frontend dynamically filters available positions based on the selected department, while the backend also validates the submitted values.
+
+* **Report Data Consistency** — The reporting features required combining employee, department, position, and salary information from multiple database queries. Additional fields had to be included in the employee directory API response to support filtering and dashboard calculations.
+
+* **Responsive User Interface** — Designing tables, forms, navigation, dashboard cards, and report controls that remain usable across different screen sizes required adjustments to the Ant Design layout and responsive grid system.
+
+* **Git and GitHub Workflow** — Managing the project through Git required understanding the difference between local commits and pushing changes to the remote GitHub repository, as well as organizing changes into meaningful feature and fix commits.
+
+* **Debugging and Dependency Compatibility** — Development also involved resolving frontend dependency and configuration issues to ensure that the React application, Ant Design components, routing, and supporting packages worked together correctly.
+
+---
+
 ## License
 
 This project was developed as an Employee Management System application for Lloyd Laboratories Inc. assessment for a Jr. Programming position. 
