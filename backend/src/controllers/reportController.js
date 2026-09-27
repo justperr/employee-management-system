@@ -12,7 +12,10 @@ async function getEmployeeDirectoryReport(req, res) {
         e.Email,
         e.Phone,
         e.HireDate,
+        e.Salary,
         e.Status,
+        e.DepartmentId,
+        e.PositionId,
         d.DepartmentName,
         p.PositionName
       FROM Employees e
@@ -28,6 +31,7 @@ async function getEmployeeDirectoryReport(req, res) {
     });
   } catch (error) {
     console.error('Employee directory report error:', error.message);
+
     return res.status(500).json({
       message: 'Internal Server Error'
     });
